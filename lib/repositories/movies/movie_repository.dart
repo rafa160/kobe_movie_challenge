@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:kobe_movie_challenge/models/movie.dart';
-import 'package:kobe_movie_challenge/repositories/movie_api_client.dart';
+import 'package:kobe_movie_challenge/repositories/movies/movie_api_client.dart';
 
 class MovieRepository {
   final MovieApiClient movieApiClient;
