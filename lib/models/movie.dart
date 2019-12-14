@@ -2,17 +2,16 @@ import 'package:equatable/equatable.dart';
 
 class Movie extends Equatable {
 
-
-  final String posterPath;
   final int id;
+  final String posterPath;
   final String backdropPath;
   final List<int> genreIds;
   final String title;
   final String releaseDate;
 
   const Movie({
-    this.posterPath,
     this.id,
+    this.posterPath,
     this.backdropPath,
     this.genreIds,
     this.title,
@@ -30,12 +29,21 @@ class Movie extends Equatable {
   ];
 
   static Movie fromJson(dynamic json) {
-    // Code this method
-    return null;
+    // Write this method
+    return Movie(
+      id: json['id'] as int,
+      posterPath: json['poster_path'] as String,
+      backdropPath: json['backdrop_path'] as String,
+      title: json['title'] as String,
+      releaseDate: json['release_date'] as String,
+    );
   }
 
-  static List<Movie> fromJsonArray(dynamic json) {
-    // Code this method
-    return null;
+  static List<Movie> fromJsonArray(dynamic jsonArray) {
+    List<Movie> movies = new List<Movie>();
+    for(var i = 0; i < jsonArray['results'].length; i++){
+      movies.add(jsonArray[i]);
+    }
+    return movies;
   }
 }
