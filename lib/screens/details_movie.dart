@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kobe_movie_challenge/blocs/movies/movies_bloc.dart';
 import 'package:kobe_movie_challenge/blocs/movies/movies_event.dart';
 import 'package:kobe_movie_challenge/blocs/movies/movies_state.dart';
+import 'package:kobe_movie_challenge/widgets/movie_details_tile_widget.dart';
 
 class DetailsMovie extends StatelessWidget {
   DetailsMovie(context);
@@ -15,72 +16,26 @@ class DetailsMovie extends StatelessWidget {
       builder: (context, active) {
         return Scaffold(
           appBar: AppBar(
-            backgroundColor: Color.fromRGBO(247, 64, 106, 1),
+            backgroundColor: Colors.black,
             title: Text(
               "Movie Detail",
               textAlign: TextAlign.center,
             ),
           ),
           body: Container(
-            color: Colors.white,
+            color: Colors.black87,
             padding: EdgeInsets.all(8),
             child: BlocBuilder<MovieBloc, MovieState>(
               builder: (context, state) {
                 double maxWidth = MediaQuery.of(context).size.width * 0.7;
                 if (state is MovieLoaded) {
                   final movie = state.movie;
-                  return Center(
-                    child: ListView(
-                      children: <Widget>[
-                        AspectRatio(
-                          aspectRatio: 16 / 9,
-                          child: Image.network(images+movie.posterPath,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                        Row(
-                          mainAxisAlignment:
-                          MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Text(
-                              movie.title,
-                              style: TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment:
-                          MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Text(
-                              "Release Date: ",
-                              style: TextStyle(
-                                fontSize: 15,),
-                            ),
-                            Text(
-                              movie.releaseDate,
-                              textAlign: TextAlign.end,
-                              style: TextStyle(
-                                fontSize: 18,),
-                            )
-                          ],
-                        ),
-                        ConstrainedBox(
-                          constraints: BoxConstraints(maxWidth: maxWidth),
-                          child: Text("Description: " + movie.overview),
-                        ),
-                        Row(
-                          children: <Widget>[
-                            Text(
-                              '${movie.genreIds}',
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
+                  return ListView(
+                    children: <Widget>[
+                      DetailsTile(
+                        movie: movie,
+                      ),
+                    ],
                   );
                 }
                 if(state is MoviesLoading) {

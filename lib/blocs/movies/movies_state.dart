@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:kobe_movie_challenge/models/movie.dart';
+import 'package:kobe_movie_challenge/models/pagination.dart';
 
 abstract class MovieState extends Equatable {
   const MovieState();
@@ -32,9 +33,10 @@ class MoviesError extends MovieState {}
 
 class UpcomingMoviesLoaded extends MovieState {
   final List<Movie> movies;
+  final Pagination pagination;
 
-  const UpcomingMoviesLoaded({@required this.movies}) : assert(movies != null);
+  const UpcomingMoviesLoaded({@required this.movies, this.pagination}) : assert(movies != null);
 
   @override
-  List<Object> get props => [movies];
+  List<Object> get props => [movies, pagination];
 }

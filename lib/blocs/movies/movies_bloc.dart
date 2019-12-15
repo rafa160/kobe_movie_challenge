@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:kobe_movie_challenge/blocs/movies/movies_event.dart';
 import 'package:kobe_movie_challenge/blocs/movies/movies_state.dart';
@@ -15,6 +17,7 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
 
   @override
   Stream<MovieState> mapEventToState(MovieEvent event) async* {
+    final currentState = state;
     if (event is FetchMovie) {
       yield MovieLoading();
       try {
@@ -25,11 +28,30 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
       }
     }
 
-    if (event is FetchUpcomingMovies) {
+    if (event is FetchUpcomingMoviesNextPage) {
       yield MoviesLoading();
       try {
-        final List<Movie> movies = await movieRepository.getUpcomingList();
-        yield UpcomingMoviesLoaded(movies: movies);
+        var response = (currentState is UpcomingMoviesLoaded)
+            ? await movieRepository.getUpcomingList(
+                page: currentState.pagination.nextPage())
+            : await movieRepository.getUpcomingList();
+        yield UpcomingMoviesLoaded(
+            movies: response.object, pagination: response.pagination);
+      } catch (_) {
+        yield MoviesError();
+      }
+    }
+
+    if (event is FetchUpcomingMoviesPreviousPage) {
+      yield MoviesLoading();
+      try {
+        var response = (currentState is UpcomingMoviesLoaded)
+            ? await movieRepository.getUpcomingList(
+            page: currentState.pagination.previousPage())
+            : await movieRepository.getUpcomingList();
+
+        yield UpcomingMoviesLoaded(
+            movies: response.object, pagination: response.pagination);
       } catch (_) {
         yield MoviesError();
       }

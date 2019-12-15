@@ -52,7 +52,7 @@ class StaggerAnimation extends StatelessWidget {
           height: 60,
           alignment: Alignment.center,
           decoration: BoxDecoration(
-              color: Color.fromRGBO(247, 64, 106, 1.0),
+              color: Colors.black,
               borderRadius: BorderRadius.all(Radius.circular(30))),
           child: _buildInside(context));
     } else {
@@ -61,7 +61,7 @@ class StaggerAnimation extends StatelessWidget {
         height: buttonZoom.value,
         alignment: Alignment.center,
         decoration: BoxDecoration(
-            color: Colors.white,
+            color: Colors.black,
             shape: buttonZoom.value < 400 ? BoxShape.circle : BoxShape.rectangle),
       );
     }

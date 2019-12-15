@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:kobe_movie_challenge/models/movie.dart';
+import 'package:kobe_movie_challenge/models/response.dart';
 import 'package:kobe_movie_challenge/repositories/movies/movie_api_client.dart';
 
 class MovieRepository {
@@ -11,8 +12,8 @@ class MovieRepository {
     return await movieApiClient.fetchMovie(id);
   }
 
-  Future<List<Movie>> getUpcomingList() async {
-    return await movieApiClient.fetchUpcomingMovies();
+  Future<Response> getUpcomingList({int page}) async {
+    return await movieApiClient.fetchUpcomingMovies(page : page);
   }
 
 }
