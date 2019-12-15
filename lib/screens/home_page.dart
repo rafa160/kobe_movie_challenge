@@ -1,19 +1,20 @@
 
 import 'dart:math';
-import 'dart:ui' as prefix0;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kobe_movie_challenge/blocs/movies/movies_bloc.dart';
 import 'package:kobe_movie_challenge/blocs/movies/movies_event.dart';
 import 'package:kobe_movie_challenge/blocs/movies/movies_state.dart';
-import 'package:kobe_movie_challenge/screens/details_movie.dart';
+import 'package:kobe_movie_challenge/widgets/movie_tile.dart';
+import 'package:kobe_movie_challenge/widgets/movies_tile.dart';
 
 
 class HomePage extends StatelessWidget {
 
   String images = 'https://image.tmdb.org/t/p/w500/';
 
+  String search;
 
   @override
   Widget build(BuildContext context) {
@@ -45,162 +46,23 @@ class HomePage extends StatelessWidget {
                   return ListView.builder(
                       itemCount: movies.length,
                       itemBuilder: (BuildContext context, int index) {
-                        return Container(
-                          padding: EdgeInsets.only(bottom: 50,top: 1),
-                          margin: EdgeInsets.all(8),
-                          child: Column(
-                            children: <Widget>[
-                              AspectRatio(
-                                aspectRatio: 16 / 9,
-                                child: Image.network(images+movies[index].posterPath,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                              Container(
-                                child: Column(
-                                  children: <Widget>[
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: <Widget>[
-                                        Text(
-                                          movies[index].title,
-                                          style: TextStyle(
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                        Column(
-                                          children: <Widget>[
-                                            IconButton(
-                                              icon: Icon(
-                                                  Icons.format_align_justify,color: Colors.black,),
-                                              onPressed: (){
-                                                Navigator.push(context, MaterialPageRoute(builder: (context) => DetailsMovie(FetchMovie())));
-                                              },
-                                            ),
-                                            Text(
-                                              "details",
-                                              style: TextStyle(fontSize: 10, fontStyle: prefix0.FontStyle.italic,fontWeight: FontWeight.bold),
-                                            )
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                    Divider(),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: <Widget>[
-                                        Text(
-                                          "Release Date: ",
-                                          style: TextStyle(
-                                              fontSize: 15,),
-                                        ),
-                                        Text(
-                                          movies[index].releaseDate,
-                                          textAlign: TextAlign.end,
-                                          style: TextStyle(
-                                              fontSize: 18,),
-                                        )
-                                      ],
-                                    ),
-                                    Divider(),
-                                    Row(
-                                      children: <Widget>[
-                                        Text(
-                                          '${movies[index].genreIds}',
-                                        ),
-                                      ],
-                                    ),
-                                    Divider(),
-                                    Divider(
-                                      thickness: 8,
-                                      color: Colors.black,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
+                        return MoviesTile(
+                          movies: movies[index],
                         );
                   });
                 }
-
                 if(state is MovieLoaded){
                   final movie = state.movie;
                   return  ListView(
                     children: <Widget>[
                       AspectRatio(
                         aspectRatio: 16 / 9,
-                        child: Image.network(images+movie.posterPath,
+                        child: Image.network(images + movie.posterPath,
                           fit: BoxFit.cover,
                         ),
                       ),
-                      Container(
-                        child: Column(
-                          children: <Widget>[
-                            Row(
-                              mainAxisAlignment:
-                              MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                Text(
-                                  movie.title,
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                Column(
-                                  children: <Widget>[
-                                    IconButton(
-                                      icon: Icon(
-                                        Icons.format_align_justify,color: Colors.black,),
-                                      onPressed: (){
-                                        Navigator.push(context, MaterialPageRoute(builder: (context) => DetailsMovie(FetchMovie(id:movie.id))));
-                                      },
-                                    ),
-                                    Text(
-                                      "details",
-                                      style: TextStyle(fontSize: 10, fontStyle: prefix0.FontStyle.italic,fontWeight: FontWeight.bold),
-                                    )
-                                  ],
-                                ),
-                              ],
-                            ),
-                            Divider(),
-                            Row(
-                              mainAxisAlignment:
-                              MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                Text(
-                                  "Release Date: ",
-                                  style: TextStyle(
-                                    fontSize: 15,),
-                                ),
-                                Text(
-                                  movie.releaseDate,
-                                  textAlign: TextAlign.end,
-                                  style: TextStyle(
-                                    fontSize: 18,),
-                                )
-                              ],
-                            ),
-                            Divider(),
-                            Row(
-                              children: <Widget>[
-                                Text(
-                                  ""
-                                ),
-                              ],
-                            ),
-                            Divider(),
-                            Divider(
-                              thickness: 8,
-                              color: Colors.black,
-                            ),
-                          ],
-                        ),
+                      MovieTile(
+                        movie: movie,
                       ),
                     ],
                   );
