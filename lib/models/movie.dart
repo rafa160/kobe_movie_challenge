@@ -46,9 +46,11 @@ class Movie extends Equatable {
   static List<Movie> fromJsonArray(dynamic jsonArray) {
     List<Movie> movies = new List<Movie>();
     for(var i = 0; i < jsonArray['results'].length; i++){
+
       movies.add(fromJson(jsonArray['results'][i]));
     }
 
     return movies;
   }
+
 }

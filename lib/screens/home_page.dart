@@ -1,4 +1,5 @@
 
+import 'dart:math';
 import 'dart:ui' as prefix0;
 
 import 'package:flutter/material.dart';
@@ -24,22 +25,13 @@ class HomePage extends StatelessWidget {
           appBar: AppBar(
             backgroundColor: Color.fromRGBO(247, 64, 106, 1),
             actions: <Widget>[
-              Row(
-                children: <Widget>[
-                  Icon(
-                    Icons.search,
-                    color: Colors.white,
-                  ),
-                  FlatButton(
-                    child: Text(
-                      "Upcoming Movies here!",
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    onPressed: () {
-                      movieBloc.add(FetchUpcomingMovies());
-                    },
-                  ),
-                ],
+              IconButton(
+                icon: Icon(Icons.search),
+                onPressed: () async {
+                  var randomizer = new Random();
+                  movieBloc.add(FetchMovie(id: randomizer.nextInt(600000)));
+                  //access your bloc
+                },
               ),
             ],
           ),
@@ -54,6 +46,7 @@ class HomePage extends StatelessWidget {
                       itemCount: movies.length,
                       itemBuilder: (BuildContext context, int index) {
                         return Container(
+                          padding: EdgeInsets.only(bottom: 50,top: 1),
                           margin: EdgeInsets.all(8),
                           child: Column(
                             children: <Widget>[
@@ -83,7 +76,7 @@ class HomePage extends StatelessWidget {
                                               icon: Icon(
                                                   Icons.format_align_justify,color: Colors.black,),
                                               onPressed: (){
-                                                Navigator.push(context, MaterialPageRoute(builder: (context) => DetailsMovie()));
+                                                Navigator.push(context, MaterialPageRoute(builder: (context) => DetailsMovie(FetchMovie())));
                                               },
                                             ),
                                             Text(
@@ -125,9 +118,6 @@ class HomePage extends StatelessWidget {
                                       thickness: 8,
                                       color: Colors.black,
                                     ),
-                                    SizedBox(
-                                      height: 10,
-                                    )
                                   ],
                                 ),
                               ),
@@ -135,6 +125,85 @@ class HomePage extends StatelessWidget {
                           ),
                         );
                   });
+                }
+
+                if(state is MovieLoaded){
+                  final movie = state.movie;
+                  return  ListView(
+                    children: <Widget>[
+                      AspectRatio(
+                        aspectRatio: 16 / 9,
+                        child: Image.network(images+movie.posterPath,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      Container(
+                        child: Column(
+                          children: <Widget>[
+                            Row(
+                              mainAxisAlignment:
+                              MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Text(
+                                  movie.title,
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Column(
+                                  children: <Widget>[
+                                    IconButton(
+                                      icon: Icon(
+                                        Icons.format_align_justify,color: Colors.black,),
+                                      onPressed: (){
+                                        Navigator.push(context, MaterialPageRoute(builder: (context) => DetailsMovie(FetchMovie(id:movie.id))));
+                                      },
+                                    ),
+                                    Text(
+                                      "details",
+                                      style: TextStyle(fontSize: 10, fontStyle: prefix0.FontStyle.italic,fontWeight: FontWeight.bold),
+                                    )
+                                  ],
+                                ),
+                              ],
+                            ),
+                            Divider(),
+                            Row(
+                              mainAxisAlignment:
+                              MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Text(
+                                  "Release Date: ",
+                                  style: TextStyle(
+                                    fontSize: 15,),
+                                ),
+                                Text(
+                                  movie.releaseDate,
+                                  textAlign: TextAlign.end,
+                                  style: TextStyle(
+                                    fontSize: 18,),
+                                )
+                              ],
+                            ),
+                            Divider(),
+                            Row(
+                              children: <Widget>[
+                                Text(
+                                  ""
+                                ),
+                              ],
+                            ),
+                            Divider(),
+                            Divider(
+                              thickness: 8,
+                              color: Colors.black,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  );
                 }
                 return Container(
                   child: Center(
@@ -157,6 +226,29 @@ class HomePage extends StatelessWidget {
               },
             ),
           ),
+          bottomSheet: Container(
+              padding: EdgeInsets.only(bottom: 10, top: 10),
+              color: Color.fromRGBO(247, 64, 106, 1),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Icon(
+                    Icons.search,
+                    color: Colors.white,
+                  ),
+                  FlatButton(
+                    child: Text(
+                      "Upcoming Movies here!",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    onPressed: () {
+                      movieBloc.add(FetchUpcomingMovies());
+                    },
+                  ),
+                ],
+              ),
+            ),
+
         );
       },
     );
