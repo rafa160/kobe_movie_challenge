@@ -8,6 +8,7 @@ class Movie extends Equatable {
   final List<int> genreIds;
   final String title;
   final String releaseDate;
+  final String overview;
 
   const Movie({
     this.id,
@@ -16,6 +17,7 @@ class Movie extends Equatable {
     this.genreIds,
     this.title,
     this.releaseDate,
+    this.overview,
   });
 
   @override
@@ -26,6 +28,7 @@ class Movie extends Equatable {
     genreIds,
     title,
     releaseDate,
+    overview,
   ];
 
   static Movie fromJson(dynamic json) {
@@ -36,6 +39,7 @@ class Movie extends Equatable {
       backdropPath: json['backdrop_path'] as String,
       title: json['title'] as String,
       releaseDate: json['release_date'] as String,
+      overview: json['overview'] as String,
     );
   }
 

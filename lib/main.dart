@@ -8,6 +8,7 @@ import 'package:kobe_movie_challenge/repositories/movies/movie_repository.dart';
 import 'package:http/http.dart' as http;
 import 'package:bloc/bloc.dart';
 import 'package:kobe_movie_challenge/screens/home_page.dart';
+import 'package:kobe_movie_challenge/screens/login_page.dart';
 
 void main() {
   final MovieRepository movieRepository = MovieRepository(
@@ -38,7 +39,7 @@ class KobeMovieChallengeApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: FlutterBlocLocalizations().appTitle,
-      home: HomePage(),
+      home: LoginPage(),
     );
   }
 }
