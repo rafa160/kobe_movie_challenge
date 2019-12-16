@@ -99,7 +99,7 @@ class _HomePageState extends State<HomePage> {
                           height: 10,
                         ),
                         Text(
-                          "Waiting you to search...",
+                          "Loading...",
                           style: TextStyle(color: Colors.white),
                         )
                       ],
