@@ -69,31 +69,21 @@ class _HomePageState extends State<HomePage> {
               builder: (context, state) {
                 if (state is UpcomingMoviesLoaded) {
                   final movies = state.movies;
-                  return Column(
-                    children: <Widget>[
-                      SizedBox(
-                        height: 5,
-                      ),
-                      Text(
-                        "Browsing page ${state.pagination.page} of ${state.pagination.totalPages}",
-                        style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),
-                      ),
-                      Expanded(
-                        child: ListView.builder(
-                            controller: _scrollController,
-                            itemCount: movies.length + 1,
-                            itemBuilder: (BuildContext context, int index) {
-                              return (index == movies.length)
-                                  ? Container()
-                                  : MovieTile(
-                                      movie: movies[index],
-                                    );
-                            }),
-                      ),
-                    ],
-                  );
+                  return GridView.builder(
+                      itemCount: movies.length,
+                      padding: EdgeInsets.only(bottom: 70),
+                      controller: _scrollController,
+                      gridDelegate:
+                      new SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          childAspectRatio: 0.7,
+                          crossAxisSpacing: 1.0),
+                      itemBuilder: (BuildContext context, int index) {
+                        return MovieTile(
+                          movie: movies[index],
+                        );
+                      });
                 }
-
                 return Container(
                   child: Center(
                     child: Column(
