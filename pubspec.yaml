@@ -48,7 +48,7 @@ flutter:
   #  - images/a_dot_burr.jpeg
   #  - images/a_dot_ham.jpeg
   assets:
-    - assets/print.jpeg
+    - assets/print1.jpeg
     - assets/print2.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
