@@ -1,4 +1,3 @@
-
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -7,9 +6,9 @@ import 'package:kobe_movie_challenge/blocs/movies/movies_bloc.dart';
 import 'package:kobe_movie_challenge/blocs/movies/movies_event.dart';
 import 'package:kobe_movie_challenge/blocs/movies/movies_state.dart';
 import 'package:kobe_movie_challenge/models/movie.dart';
+import 'package:kobe_movie_challenge/widgets/delegate/data_search_app.dart';
 import 'package:kobe_movie_challenge/widgets/movie_tile.dart';
-import 'package:kobe_movie_challenge/widgets/movies_tile.dart';
-
+import 'package:kobe_movie_challenge/widgets/pagination_widget.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -27,7 +26,7 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     _scrollController.addListener(_onScroll);
     movieBloc = BlocProvider.of<MovieBloc>(context);
-    movieBloc.add(FetchUpcomingMovies());
+    movieBloc.add(FetchUpcomingMoviesNextPage());
   }
 
   void _onScroll() {
@@ -53,13 +52,12 @@ class _HomePageState extends State<HomePage> {
         return Scaffold(
           appBar: AppBar(
             backgroundColor: Colors.black,
+            title: Text("Kobe Challanger", style: TextStyle(),textAlign: TextAlign.center,),
             actions: <Widget>[
               IconButton(
                 icon: Icon(Icons.search),
-                onPressed: () async {
-                  var randomizer = new Random();
-                  movieBloc.add(FetchMovie(id: randomizer.nextInt(600000)));
-                  //access your bloc
+                onPressed: () {
+                  showSearch(context: context, delegate: Teste());
                 },
               ),
             ],
@@ -71,40 +69,49 @@ class _HomePageState extends State<HomePage> {
               builder: (context, state) {
                 if (state is UpcomingMoviesLoaded) {
                   final movies = state.movies;
-                  return ListView.builder(
-                    controller: _scrollController,
-                      itemCount: movies.length + 1,
-                      itemBuilder: (BuildContext context, int index) {
-                        return MoviesTile(
-                          movies: movies[index],
-                        );
-                      });
-                }
-
-                if(state is MovieLoaded){
-                  final movie = state.movie;
-                  return  ListView(
+                  return Column(
                     children: <Widget>[
-                      MovieTile(
-                        movie: movie,
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Text(
+                        "Browsing page ${state.pagination.page} of ${state.pagination.totalPages}",
+                        style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),
+                      ),
+                      Expanded(
+                        child: ListView.builder(
+                            controller: _scrollController,
+                            itemCount: movies.length + 1,
+                            itemBuilder: (BuildContext context, int index) {
+                              return (index == movies.length)
+                                  ? Container()
+                                  : MovieTile(
+                                      movie: movies[index],
+                                    );
+                            }),
                       ),
                     ],
                   );
                 }
+
                 return Container(
                   child: Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         CircularProgressIndicator(
-                          valueColor: AlwaysStoppedAnimation<Color>(Colors.white,
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            Colors.white,
                           ),
                           strokeWidth: 10.0,
                         ),
                         SizedBox(
                           height: 10,
                         ),
-                        Text("Waiting you to search...", style: TextStyle(color: Colors.white),)
+                        Text(
+                          "Waiting you to search...",
+                          style: TextStyle(color: Colors.white),
+                        )
                       ],
                     ),
                   ),
@@ -112,40 +119,7 @@ class _HomePageState extends State<HomePage> {
               },
             ),
           ),
-          bottomSheet: Container(
-            padding: EdgeInsets.only(bottom: 10, top: 10),
-            color: Colors.black,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                FlatButton(
-                  color: Colors.black87,
-                  child: Text("<", style: TextStyle(fontSize: 18, color: Colors.white),),
-                  onPressed: (){
-                    movieBloc.add(FetchUpcomingMoviesPreviousPage());
-                  },
-                ),
-                FlatButton(
-                  color: Colors.black87,
-                  child: Text(
-                    "Upcoming Movies here!",
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  onPressed: () {
-                    movieBloc.add(FetchUpcomingMoviesNextPage());
-                  },
-                ),
-                FlatButton(
-                  color: Colors.black87,
-                  child: Text(">", style: TextStyle(fontSize: 18, color: Colors.white),),
-                  onPressed: (){
-                    movieBloc.add(FetchUpcomingMoviesNextPage());
-                  },
-                ),
-              ],
-            ),
-          ),
-
+          bottomSheet: PaginationWidget(),
         );
       },
     );

@@ -13,7 +13,6 @@ class Routes {
 
   Map<String, String> customQueryParameters = Map();
 
-  // need check to see if works
   String buildRoute() {
     String url = this._buildRouteFromUrl();
     String queryParams = this._buildRouteFromQueryParameters();

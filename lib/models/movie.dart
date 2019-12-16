@@ -31,6 +31,16 @@ class Movie extends Equatable {
     overview,
   ];
 
+  static List<int> genreIdsFromJson(dynamic json) {
+    List<int> ids = List<int>();
+
+    json.forEach((value) {
+      ids.add(value);
+    });
+
+    return ids;
+  }
+
   static Movie fromJson(dynamic json) {
     // Write this method
     return Movie(
@@ -38,6 +48,7 @@ class Movie extends Equatable {
       posterPath: json['poster_path'] as String,
       backdropPath: json['backdrop_path'] as String,
       title: json['title'] as String,
+      genreIds: genreIdsFromJson(json['genre_ids']),
       releaseDate: json['release_date'] as String,
       overview: json['overview'] as String,
     );
